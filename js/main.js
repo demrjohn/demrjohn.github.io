@@ -143,7 +143,7 @@ function drawMap() {
     .text("Brewer Street");
 }
 
-//Drawing the timeline graph
+//Timeline graph
 function drawTimeline() {
   const margin = {top: 60, right: 20, bottom: 70, left: 40};
   const width = 600 - margin.left - margin.right;
@@ -185,7 +185,7 @@ function drawTimeline() {
         .attr("font-weight", "bold")
         .text("Number of Deaths Per Day");
 
-      // y-axis labels: num deaths
+      // y-axis labels: number of deaths
       timeline.append("g")
         .attr("class", "axis")
         .call(yAxis)
@@ -228,7 +228,7 @@ function drawTimeline() {
         .on("mouseleave", onMouseLeave);
     });
 
-//timeline interactivity
+//timeline
   function onMouseEnter(d, index) {
     // animate for up to & including target
     for (let i = 0; i <= index; i++) {
@@ -376,7 +376,7 @@ function drawTimeline() {
       .append("g")
         .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
-    //label information
+    //label info
     x.domain(age);
     y.domain([0, d3.max(totalAgeDeaths)]);
 
