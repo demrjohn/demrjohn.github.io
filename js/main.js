@@ -19,28 +19,10 @@ const age = [
 
 drawMap();
 drawTimeline();
-d3.csv("data/deaths_age_sex_date.csv")
- .get(function(res) {
+d3.csv("data/deaths_age_sex_date.csv", function(res) {
  deathsData = res;
-     deaths_age = d3.nest()
-                          .key(function(d){return d.age;})
-                          .rollup(function(v){
-                              return v.length;})
-                          .entries(deaths_data)
-                          .map(function(d){
-                            return {age:d.key, count: d.value};
-                          });
-
-            deaths_gender = d3.nest()
-                          .key(function(d){return d.gender;})
-                          .rollup(function(v){
-                              return v.length;})
-                          .entries(deaths_data)
-                          .map(function(d){
-                            return {gender:d.key, count: d.value};
-                          });
-  drawGraphs(res);
-  updateMap();
+ drawGraphs(res);
+ updateMap();
 });
 
 function drawMap() {
