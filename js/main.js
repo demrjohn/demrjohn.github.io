@@ -19,25 +19,8 @@ const age = [
 
 drawMap();
 drawTimeline();
-d3.csv("data/deaths_age_sex.csv"), function(res){
-  deathsData = res;
-    deaths_age = d3.nest()
-                          .key(function(d){return d.age;})
-                          .rollup(function(v){
-                              return v.length;})
-                          .entries(deaths_data)
-                          .map(function(d){
-                            return {age:d.key, count: d.value};
-                          });
-
-            deaths_gender = d3.nest()
-                          .key(function(d){return d.gender;})
-                          .rollup(function(v){
-                              return v.length;})
-                          .entries(deaths_data)
-                          .map(function(d){
-                            return {gender:d.key, count: d.value};
-                          });
+d3.csv("data/deaths_age_sex.csv"), function(res) {
+ deathsData = res;
   drawGraphs(res);
   updateMap();
 });
@@ -107,6 +90,7 @@ function drawMap() {
     .attr("y", -620)
     .text("Brewery");
 
+  // Golden Square
   map.append("g").append("rect")
     .attr("class", "goldenSquare")
     .attr("x", 439)
@@ -115,36 +99,42 @@ function drawMap() {
     .attr("height", 50)
     .style("opacity", 0.1)
 
+  // Golden Square Label pt 1
   map.append("g").append("text")
     .attr("class", "goldenSquareLabel")
     .attr("x", 445)
     .attr("y", 30)
     .text("Golden");
 
+  // Golden Square Label pt 1
   map.append("g").append("text")
     .attr("class", "goldenSquareLabel")
     .attr("x", 445)
     .attr("y", 40)
     .text("Square");
-  
+
+  // Broad street
   map.append("g").append("text")
     .attr("class", "broadStreet")
     .attr("x", 590 )
     .attr("y", -148)
-    .text("Broad Street");
+    .text("Broad Street")
 
+  // Great Marlborough Street
   map.append("g").append("text")
     .attr("class", "greatStreet")
     .attr("x", 385)
     .attr("y", -336)
     .text("Great Marlborough Street");
 
+  // Regent Street
    map.append("g").append("text")
     .attr("class", "regentStreet")
     .attr("x", -215 )
     .attr("y", -358)
     .text("Regent Street");
 
+  // Brewer Street
   map.append("g").append("text")
     .attr("class", "brewerStreet")
     .attr("x", 424 )
@@ -152,6 +142,7 @@ function drawMap() {
     .text("Brewer Street");
 }
 
+//Drawing the timeline graph
 function drawTimeline() {
   const margin = {top: 60, right: 20, bottom: 70, left: 40};
   const width = 600 - margin.left - margin.right;
@@ -193,7 +184,7 @@ function drawTimeline() {
         .attr("font-weight", "bold")
         .text("Number of Deaths Per Day");
 
-      // y-axis labels: number of deaths
+      // y-axis labels: num deaths
       timeline.append("g")
         .attr("class", "axis")
         .call(yAxis)
@@ -236,7 +227,7 @@ function drawTimeline() {
         .on("mouseleave", onMouseLeave);
     });
 
-//timeline
+//timeline interactivity
   function onMouseEnter(d, index) {
     // animate for up to & including target
     for (let i = 0; i <= index; i++) {
@@ -384,7 +375,7 @@ function drawTimeline() {
       .append("g")
         .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
-    //label info
+    //label information
     x.domain(age);
     y.domain([0, d3.max(totalAgeDeaths)]);
 
