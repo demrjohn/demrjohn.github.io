@@ -19,7 +19,7 @@ const age = [
 
 drawMap();
 drawTimeline();
-d3.csv("data/deaths_age_sex_date.csv", function(res) {
+d3.csv("data/deaths_age_sex.csv", function(res) {
  deathsData = res;
  drawGraphs(res);
  updateMap();
