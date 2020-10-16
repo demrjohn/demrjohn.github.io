@@ -166,7 +166,7 @@ function drawTimeline() {
     .append("g")
       .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
-  d3.csv("data/deathdays.csv", (data) => {
+  d3.csv("data/deathdays.csv", function(data) => {
       data.forEach(function (d) {
         d.date = parseDate(d.date);
         d.deaths = +d.deaths;
@@ -214,8 +214,7 @@ function drawTimeline() {
       // graph bars
       timeline.selectAll("bar")
         .data(data)
-        .enter()
-        .append("rect")
+        .enter().append("rect")
         .attr("id", (d, i) => `timelineBar${i}`)
         .attr("class", "timelineBar")
         .attr("x", d => x(d.date))
@@ -227,7 +226,7 @@ function drawTimeline() {
         .on("mouseleave", onMouseLeave);
     });
 
-//timeline interactivity
+//timeline activity
   function onMouseEnter(d, index) {
     // animate for up to & including target
     for (let i = 0; i <= index; i++) {
