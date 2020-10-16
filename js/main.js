@@ -19,7 +19,7 @@ const age = [
 
 drawMap();
 drawTimeline();
-d3.csv("data/deaths_age_sex.csv")
+d3.csv("data/deaths_age_sex_date.csv")
  .get(function(res) {
  deathsData = res;
      deaths_age = d3.nest()
