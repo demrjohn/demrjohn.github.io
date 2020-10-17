@@ -8,9 +8,6 @@ d3.csv("data/deaths_age_sex.csv", function(res) {
 
 function drawMap() {
   const map = d3.select(".map")
-    map.attr("width", "100%")
-    map.attr("height", "100%")
-    map.call(d3.behavior.zoom().on("zoom", function () {
     .attr("width", "100%")
     .attr("height", "100%")
     .call(d3.behavior.zoom().on("zoom", function () {
