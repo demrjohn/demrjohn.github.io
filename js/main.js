@@ -63,7 +63,7 @@ function drawMap() {
     });
 
   map.append("g").append("rect")
-    .attr("class", "Work")
+    .attr("class", "work")
     .attr("x", 523)
     .attr("y", 195)
     .attr("width", 60)
@@ -71,13 +71,13 @@ function drawMap() {
     .style("opacity", 0.1)
 
   map.append("g").append("text")
-    .attr("class", "WorkLabel")
+    .attr("class", "workLabel")
     .attr("x", 518 )
     .attr("y", -243)
     .text("Work House");
 
   map.append("g").append("rect")
-    .attr("class", "Brewery")
+    .attr("class", "brewery")
     .attr("x", 610 )
     .attr("y", 76)
     .attr("width", 28)
@@ -85,14 +85,14 @@ function drawMap() {
     .style("opacity", 0.1)
 
   map.append("g").append("text")
-    .attr("class", "BreweryLabel")
+    .attr("class", "breweryLabel")
     .attr("x", -130 )
     .attr("y", -620)
     .text("Brewery");
 
   // Golden Square
   map.append("g").append("rect")
-    .attr("class", "TheSquare")
+    .attr("class", "theSquare")
     .attr("x", 439)
     .attr("y", -62)
     .attr("width", 50)
@@ -101,42 +101,42 @@ function drawMap() {
 
   // Golden Square Label pt 1
   map.append("g").append("text")
-    .attr("class", "TheSquareLabel")
+    .attr("class", "theSquareLabel")
     .attr("x", 445)
     .attr("y", 30)
     .text("Golden");
 
   // Golden Square Label pt 1
   map.append("g").append("text")
-    .attr("class", "TheSquareLabel")
+    .attr("class", "theSquareLabel")
     .attr("x", 445)
     .attr("y", 40)
     .text("Square");
 
   // Broad street
   map.append("g").append("text")
-    .attr("class", "Broad")
+    .attr("class", "broad")
     .attr("x", 590 )
     .attr("y", -148)
     .text("Broad Street")
 
   // Great Marlborough Street
   map.append("g").append("text")
-    .attr("class", "Marlborough")
+    .attr("class", "marlborough")
     .attr("x", 385)
     .attr("y", -336)
     .text("Great Marlborough Street");
 
   // Regent Street
    map.append("g").append("text")
-    .attr("class", "Regent")
+    .attr("class", "regent")
     .attr("x", -215 )
     .attr("y", -358)
     .text("Regent Street");
 
   // Brewer Street
   map.append("g").append("text")
-    .attr("class", "Brewer")
+    .attr("class", "brewer")
     .attr("x", 424 )
     .attr("y", 160)
     .text("Brewer Street");
