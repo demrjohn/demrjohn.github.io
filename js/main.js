@@ -1,21 +1,4 @@
-// data and filter state
-let deathsData;
-let filter = {
-  date: null,
-  gender: null,
-  age: null
-}
 
-// data references
-const gender = ["male", "female"];
-const age = [
-  "age 0-10",
-  "age 11-20",
-  "age 21-40",
-  "age 41-60",
-  "age 61-80",
-  "age 80+"
-];
 
 drawMap();
 drawTimeline();
@@ -493,3 +476,23 @@ function offset(d) {
   const scale = 45;
   return d * scale - scale * 3;
 }
+
+// data and filter state
+let deathsData;
+let filter = {
+  date: null,
+  gender: null,
+  age: null
+}
+
+// data references
+const gender = ["male", "female"];
+const age = [
+  "age 0-10",
+  "age 11-20",
+  "age 21-40",
+  "age 41-60",
+  "age 61-80",
+  "age 80+"
+];
+
