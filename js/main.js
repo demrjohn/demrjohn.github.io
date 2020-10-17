@@ -26,11 +26,11 @@ function drawMap() {
 
   d3.json("data/streets.json", (data) => {
       streets.selectAll("path")
-        .data(data)
-        .enter()
-        .append("path")
-        .attr("class", "street")
-        .attr("d", lineFunction);
+        streets.data(data)
+        streets.enter()
+        streets.append("path")
+        streets.attr("class", "street")
+        streets.attr("d", lineFunction);
     });
 
   d3.csv("data/pumps.csv", (data) => {
