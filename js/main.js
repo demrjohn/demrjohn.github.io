@@ -1,5 +1,3 @@
-
-
 drawMap();
 drawTimeline();
 d3.csv("data/deaths_age_sex.csv", function(res) {
@@ -81,11 +79,19 @@ function drawMap() {
     .attr("height", 50)
     .style("opacity", 0.1)
 
+// Golden Square Label pt 1
   map.append("g").append("text")
     .attr("class", "theSquareLabel")
     .attr("x", 445)
     .attr("y", 30)
     .text("Golden");
+
+ // Golden Square Label pt 2
+  map.append("g").append("text")
+    .attr("class", "theSquareLabel")
+    .attr("x", 445)
+    .attr("y", 40)
+    .text("Square");
 
   map.append("g").append("text")
     .attr("class", "broad")
@@ -477,7 +483,7 @@ function offset(d) {
   return d * scale - scale * 3;
 }
 
-// data and filter state
+//deathsdata and filter
 let deathsData;
 let filter = {
   date: null,
@@ -485,7 +491,7 @@ let filter = {
   age: null
 }
 
-// data references
+// references
 const gender = ["male", "female"];
 const age = [
   "age 0-10",
