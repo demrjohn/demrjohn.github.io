@@ -73,52 +73,52 @@
     transform: scale(1, -1);
   }
   
-  .workHouse{
+  .Work{
     transform: rotate(30deg);
   }
   
-  .workHouseLabel{
+  .WorkLabel{
     transform: rotate(28deg) scale(1,-1);
     font-size: 10px;
   }
   
-  .brewery{
+  .Brewery{
     transform: rotate(30deg);
   }
   
-  .breweryLabel{
+  .BreweryLabel{
     transform: rotate(-61deg) scale(1,-1);
     font-size: 10px;
   }
   
-  .goldenSquare{
+  .TheSquare{
     transform: rotate(35deg);
   }
   
-  .goldenSquareLabel{
+  .TheSquareLabel{
     transform: rotate(35deg) scale(1,-1);
     font-size: 10px;
   }
   
-  .broadStreet{
+  .Broad{
     transform: rotate(28deg) scale(1,-1);
     font-size: 10px;
     font-weight: bold;
   }
   
-  .greatStreet{
+  .Marlborough{
     transform: rotate(23deg) scale(1,-1);
     font-size: 10px;
     font-weight: bold;
   }
   
-  .regentStreet{
+  .Regent{
     transform: rotate(-61deg) scale(1,-1);
     font-size: 10px;
     font-weight: bold;
   }
   
-  .brewerStreet{
+  .Brewer{
     transform: rotate(42deg) scale(1,-1);
     font-size: 10px;
     font-weight: bold;
