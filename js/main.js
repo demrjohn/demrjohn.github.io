@@ -166,7 +166,7 @@ function drawTimeline() {
     .append("g")
       .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
-  d3.csv("data/deathdays.csv", function(data) => {
+  d3.csv("data/deathdays.csv", (data) => {
       data.forEach(function (d) {
         d.date = parseDate(d.date);
         d.deaths = +d.deaths;
@@ -214,7 +214,8 @@ function drawTimeline() {
       // graph bars
       timeline.selectAll("bar")
         .data(data)
-        .enter().append("rect")
+        .enter()
+        .append("rect")
         .attr("id", (d, i) => `timelineBar${i}`)
         .attr("class", "timelineBar")
         .attr("x", d => x(d.date))
