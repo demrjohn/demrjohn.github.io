@@ -17,10 +17,13 @@ function drawMap() {
   const streets = map.append("g");
   const pumps = map.append("g");
   map.append("g").attr("id", "deaths");
+ 
   d3.select("button").on("click", reset);
+ 
   const lineFunction = d3.svg.line()
     .x(d => offset(d.x))
     .y(d => offset(d.y))
+  
   d3.json("data/streets.json", (data) => {
       streets.selectAll("path")
         .data(data)
@@ -29,6 +32,7 @@ function drawMap() {
         .attr("class", "street")
         .attr("d", lineFunction);
     });
+ 
   d3.csv("data/pumps.csv", (data) => {
       pumps.selectAll("circle")
         .data(data)
@@ -38,6 +42,7 @@ function drawMap() {
         .attr("cy", d => offset(d.y))
         .attr("class", "pumps");
     });
+ 
  //building labels
     map.append("g").append("rect")
     .attr("class", "brewery")
@@ -46,6 +51,7 @@ function drawMap() {
     .attr("width", 28)
     .attr("height", 48)
     .style("opacity", 0.1)
+ 
   map.append("g").append("text")
     .attr("class", "breweryLabel")
     .attr("x", -130 )
@@ -59,11 +65,13 @@ function drawMap() {
     .attr("width", 60)
     .attr("height", 50)
     .style("opacity", 0.1)
+ 
   map.append("g").append("text")
     .attr("class", "workLabel")
     .attr("x", 518 )
     .attr("y", -243)
     .text("Work House");
+ 
   map.append("g").append("rect")
     .attr("class", "theSquare")
     .attr("x", 439)
@@ -71,24 +79,28 @@ function drawMap() {
     .attr("width", 50)
     .attr("height", 50)
     .style("opacity", 0.1)
+ 
 // Golden Square Label pt 1
   map.append("g").append("text")
     .attr("class", "theSquareLabel")
     .attr("x", 445)
     .attr("y", 30)
     .text("Golden");
+ 
  // Golden Square Label pt 2
   map.append("g").append("text")
     .attr("class", "theSquareLabel")
     .attr("x", 445)
     .attr("y", 40)
     .text("Square");
+ 
  // Streets
   map.append("g").append("text")
     .attr("class", "broad")
     .attr("x", 590 )
     .attr("y", -148)
     .text("Broad Street")
+ 
   map.append("g").append("text")
     .attr("class", "regent")
     .attr("x", -215 )
@@ -114,26 +126,32 @@ function drawTimeline() {
   const height = 400 - margin.top - margin.bottom;
   const x = d3.scale.ordinal().rangeRoundBands([0, width], .05);
   const y = d3.scale.linear().range([height, 0]);
+ 
   const xAxis = d3.svg.axis()
     .scale(x)
     .orient("bottom")
     .tickFormat(d3.time.format("%d-%b"));
+ 
   const yAxis = d3.svg.axis()
     .scale(y)
     .orient("left")
     .ticks(10);
+ 
   const timeline = d3.select(".timeline")
     timeline.attr("width", width + margin.left + margin.right)
     timeline.attr("height", height + margin.top + margin.bottom)
     timeline.append("g")
       .attr("transform", `translate(${margin.left}, ${margin.top})`);
+ 
   d3.csv("data/deathdays.csv", (data) => {
       data.forEach(function (d) {
         d.date = parseDate(d.date);
         d.deaths = +d.deaths;
       });
+   
       x.domain(data.map(d => d.date));
       y.domain([0, d3.max(data, d => d.deaths)]);
+   
       // title
       timeline.append("text")
         .attr("x", (width / 2.5))
@@ -142,7 +160,8 @@ function drawTimeline() {
         .attr("font-family", "sans-serif")
         .attr("font-weight", "bold")
         .text("Number of Deaths Per Day");
-      // y-axis labels: num deaths
+   
+      // y-axis
       timeline.append("g")
         .attr("class", "axis")
         .call(yAxis)
@@ -152,7 +171,8 @@ function drawTimeline() {
         .attr("dy", ".71em")
         .style("text-anchor", "end")
         .text("Number of deaths");
-      // x-axis labels: dates
+   
+      // x-axis
       timeline.append("g")
         .attr("class", "axis")
         .attr("transform", `translate(0, ${height})`)
@@ -167,7 +187,8 @@ function drawTimeline() {
         .on("mouseenter", onMouseEnter)
         .on("mouseleave", onMouseLeave)
         .on("click", onClick);
-      // graph bars
+   
+      // graphing bars
       timeline.selectAll("bar")
         .data(data)
         .enter()
@@ -182,6 +203,7 @@ function drawTimeline() {
         .on("mouseenter", onMouseEnter)
         .on("mouseleave", onMouseLeave);
     });
+ 
 //timeline activity
   function onMouseEnter(d, index) {
     // animate for up to & including target
@@ -190,6 +212,7 @@ function drawTimeline() {
       d3.select(`#timelineDate${i}`).classed("timelineHover", true);
     }
   }
+ 
   function onMouseLeave(d, index) {
     // animate for up to & including target
     for (let i = 0; i <= index; i++) {
@@ -197,22 +220,25 @@ function drawTimeline() {
       d3.select(`#timelineDate${i}`).classed("timelineHover", false);
     }
   }
+ 
   function onClick(d, index) {
     const isActive = d3.select(this).classed("timelineActive");
-    // if active link is clicked, clear all links
     if (isActive) {
       d3.selectAll(".timelineActive").classed("timelineActive", false);
       updateMap({date: null});
       return;
     }
+   
     d3.selectAll(".timelineActive").classed("timelineActive", false);
     for (let i = 0; i <= index; i++) {
       d3.select(`#timelineBar${i}`).classed("timelineActive", true);
     }
+   
     let newDate = d3.select(`#timelineDate${index}`).classed("timelineActive", true).data()[0];
     updateMap({date: newDate});
   }
 }
+
   function drawGraphs(data) {
     let totalGenderDeaths = [0, 0];
     let totalAgeDeaths = [0, 0, 0, 0, 0, 0];
@@ -220,26 +246,33 @@ function drawTimeline() {
       totalGenderDeaths[data.gender]++;
       totalAgeDeaths[data.age]++;
     });
+   
     const margin = {top: 60, right: 20, bottom: 70, left: 40},
           width = 300 - margin.left - margin.right,
           height = 350 - margin.top - margin.bottom;
+   
     const x = d3.scale.ordinal().rangeRoundBands([0, width], .5);
     const y = d3.scale.linear().range([height, 0]);
+   
     const xAxis = d3.svg.axis()
       .scale(x)
       .orient("bottom");
+   
     const yAxis = d3.svg.axis()
       .scale(y)
       .orient("left")
       .ticks(10);
+   
   function drawGender() {
     const svg = d3.select(".genderGraph")
       .attr("width", width + margin.left + margin.right)
       .attr("height", height + margin.top + margin.bottom)
       .append("g")
         .attr("transform", `translate(${margin.left}, ${margin.top})`);
+   
     x.domain(gender);
     y.domain([0, d3.max(totalGenderDeaths)]);
+   
     svg.append("g")
       .attr("class", "x axis")
       .attr("transform", `translate(0, ${height})`)
@@ -253,6 +286,7 @@ function drawTimeline() {
         .on("click", onClick)
         .on("mouseenter", onMouseEnter)
         .on("mouseleave", onMouseLeave);
+   
     svg.append("g")
       .attr("class", "y axis")
       .call(yAxis)
@@ -262,12 +296,14 @@ function drawTimeline() {
         .attr("dy", ".71em")
         .style("text-anchor", "end")
         .text("Number of deaths");
+   
     svg.append("text")
       .attr("x", 0)
       .attr("y", 0 - (margin.top / 2))
       .attr("font-family", "sans-serif")
       .attr("font-weight", "bold")
       .text("Deaths by Gender");
+   
     svg.selectAll("bar")
       .data(totalGenderDeaths)
       .enter()
@@ -281,14 +317,17 @@ function drawTimeline() {
         .on("click", onClick)
         .on("mouseenter", onMouseEnter)
         .on("mouseleave", onMouseLeave);
+   
     function onMouseEnter(d, i) {
       d3.select(`#genderBar${i}`).classed("genderHover", true);
       d3.select(`#genderLabel${i}`).classed("genderHover", true);
     }
+   
     function onMouseLeave(d, i) {
       d3.select(`#genderBar${i}`).classed("genderHover", false);
       d3.select(`#genderLabel${i}`).classed("genderHover", false);
     };
+   
     function onClick(d, i) {
       const isActive = d3.select(this).classed("genderActive");
       if (isActive) {
@@ -296,6 +335,7 @@ function drawTimeline() {
         updateMap({gender: null});
         return;
       }
+     
       d3.selectAll(".genderActive").classed("genderActive", false);
       d3.select(`#genderBar${i}`).classed("genderActive", true);
       d3.select(`#genderLabel${i}`).classed("genderActive", true);
@@ -303,15 +343,18 @@ function drawTimeline() {
     }
   }
   drawGender();
+   
   function drawAge() {
     const svg = d3.select(".ageGraph")
       .attr("width", width + margin.left + margin.right)
       .attr("height", height + margin.top + margin.bottom)
       .append("g")
         .attr("transform", `translate(${margin.left}, ${margin.top})`);
+   
     //label information
     x.domain(age);
     y.domain([0, d3.max(totalAgeDeaths)]);
+   
     svg.append("g")
       .attr("class", "x axis")
       .attr("transform", `translate(0, ${height})`)
@@ -322,6 +365,7 @@ function drawTimeline() {
         .attr("dx", "-.8em")
         .attr("dy", "-.55em")
           .attr("transform", "rotate(-75)" );
+   
     svg.append("g")
       .attr("class", "y axis")
       .call(yAxis)
@@ -331,12 +375,14 @@ function drawTimeline() {
         .attr("dy", ".71em")
         .style("text-anchor", "end")
         .text("Number of deaths");
+   
     svg.append("text")
       .attr("x", 0)
       .attr("y", 0 - (margin.top / 2))
       .attr("font-family", "sans-serif")
       .attr("font-weight", "bold")
       .text("Deaths by Age Range");
+   
     svg.selectAll("bar")
       .data(totalAgeDeaths)
       .enter()
@@ -350,14 +396,17 @@ function drawTimeline() {
         .on("click", onClick)
         .on("mouseenter", onMouseEnter)
         .on("mouseleave", onMouseLeave);
+   
     function onMouseEnter(d, i) {
       d3.select(`#ageBar${i}`).classed("genderHover", true);
       d3.select(`#ageLabel${i}`).classed("genderHover", true);
     }
+   
     function onMouseLeave(d, i) {
       d3.select(`#ageBar${i}`).classed("genderHover", false);
       d3.select(`#ageLabel${i}`).classed("genderHover", false);
     };
+   
     function onClick(d, i) {
       const isActive = d3.select(this).classed("ageActive");
       if (isActive) {
@@ -373,12 +422,12 @@ function drawTimeline() {
   }
   drawAge();
 }
+
 function updateMap(newFilter) {
-  // update filter
   filter = {...filter, ...newFilter};
-  // clear current render
+
   d3.select("#deaths").selectAll("circle").remove();
-  // apply filter & render
+
   d3.select("#deaths").selectAll("circle")
     .data(deathsData.filter(function(d) {
       const matchesGender = filter.gender === null || d.gender == filter.gender;
@@ -395,18 +444,22 @@ function updateMap(newFilter) {
       .on("mouseenter", onMouseEnter)
       .on("mouseleave", onMouseLeave)
       .on("mousemove", onMouseMove);
+ 
   function onMouseEnter(d) {
     d3.select(".tooltip").classed("showTooltip", true)
   }
+ 
   function onMouseMove(d) {
     d3.select(".tooltip").html(`${gender[d.gender]}, ${age[d.age]}`)
       .style("left", `${d3.event.pageX - window.scrollX + 12}px`)
       .style("top", `${d3.event.pageY - window.scrollY - 18}px`)
   }
+ 
   function onMouseLeave(d) {
     d3.select(".tooltip").classed("showTooltip", false);
   }
 }
+
 function reset() {
   d3.selectAll(".timelineActive").classed("timelineActive", false);
   d3.selectAll(".genderActive").classed("genderActive", false);
@@ -417,13 +470,16 @@ function reset() {
     age: null
   });
 }
+
 function parseDate(date) {
   return d3.time.format("%d-%b").parse(date);
 }
+
 function offset(d) {
   const scale = 45;
   return d * scale - scale * 3;
 }
+
 //deathsdata and filter
 let deathsData;
 let filter = {
@@ -431,6 +487,7 @@ let filter = {
   gender: null,
   age: null
 }
+
 // references
 const gender = ["male", "female"];
 const age = [
