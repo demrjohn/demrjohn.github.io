@@ -62,6 +62,20 @@ function drawMap() {
         .attr("class", "pumps");
     });
 
+    map.append("g").append("rect")
+    .attr("class", "brewery")
+    .attr("x", 610 )
+    .attr("y", 76)
+    .attr("width", 28)
+    .attr("height", 48)
+    .style("opacity", 0.1)
+
+  map.append("g").append("text")
+    .attr("class", "breweryLabel")
+    .attr("x", -130 )
+    .attr("y", -620)
+    .text("Brewery");
+  
   map.append("g").append("rect")
     .attr("class", "work")
     .attr("x", 523)
@@ -77,21 +91,6 @@ function drawMap() {
     .text("Work House");
 
   map.append("g").append("rect")
-    .attr("class", "brewery")
-    .attr("x", 610 )
-    .attr("y", 76)
-    .attr("width", 28)
-    .attr("height", 48)
-    .style("opacity", 0.1)
-
-  map.append("g").append("text")
-    .attr("class", "breweryLabel")
-    .attr("x", -130 )
-    .attr("y", -620)
-    .text("Brewery");
-
-  // Golden Square
-  map.append("g").append("rect")
     .attr("class", "theSquare")
     .attr("x", 439)
     .attr("y", -62)
@@ -99,47 +98,35 @@ function drawMap() {
     .attr("height", 50)
     .style("opacity", 0.1)
 
-  // Golden Square Label pt 1
   map.append("g").append("text")
     .attr("class", "theSquareLabel")
     .attr("x", 445)
     .attr("y", 30)
     .text("Golden");
 
-  // Golden Square Label pt 1
-  map.append("g").append("text")
-    .attr("class", "theSquareLabel")
-    .attr("x", 445)
-    .attr("y", 40)
-    .text("Square");
-
-  // Broad street
   map.append("g").append("text")
     .attr("class", "broad")
     .attr("x", 590 )
     .attr("y", -148)
     .text("Broad Street")
 
-  // Great Marlborough Street
   map.append("g").append("text")
-    .attr("class", "marlborough")
-    .attr("x", 385)
-    .attr("y", -336)
-    .text("Great Marlborough Street");
-
-  // Regent Street
-   map.append("g").append("text")
     .attr("class", "regent")
     .attr("x", -215 )
     .attr("y", -358)
     .text("Regent Street");
-
-  // Brewer Street
+  
   map.append("g").append("text")
     .attr("class", "brewer")
     .attr("x", 424 )
     .attr("y", 160)
     .text("Brewer Street");
+  
+  map.append("g").append("text")
+    .attr("class", "marlborough")
+    .attr("x", 385)
+    .attr("y", -336)
+    .text("Great Marlborough Street");
 }
 
 //Drawing the timeline graph
