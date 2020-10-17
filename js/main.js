@@ -35,14 +35,15 @@ function drawMap() {
 
   d3.csv("data/pumps.csv", (data) => {
       pumps.selectAll("circle")
-        .data(data)
-        .enter()
-        .append("circle")
-        .attr("cx", d => offset(d.x))
-        .attr("cy", d => offset(d.y))
-        .attr("class", "pumps");
+        pumps.data(data)
+        pumps.enter()
+        pumps.append("circle")
+        pumps.attr("cx", d => offset(d.x))
+        pumps.attr("cy", d => offset(d.y))
+        pumps.attr("class", "pumps");
     });
 
+ //building labels
     map.append("g").append("rect")
     .attr("class", "brewery")
     .attr("x", 610 )
@@ -93,6 +94,7 @@ function drawMap() {
     .attr("y", 40)
     .text("Square");
 
+ // Streets
   map.append("g").append("text")
     .attr("class", "broad")
     .attr("x", 590 )
@@ -118,7 +120,7 @@ function drawMap() {
     .text("Great Marlborough Street");
 }
 
-//Drawing the timeline graph
+//Timeline graph
 function drawTimeline() {
   const margin = {top: 60, right: 20, bottom: 70, left: 40};
   const width = 600 - margin.left - margin.right;
@@ -137,9 +139,9 @@ function drawTimeline() {
     .ticks(10);
 
   const timeline = d3.select(".timeline")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-    .append("g")
+    timeline.attr("width", width + margin.left + margin.right)
+    timeline.attr("height", height + margin.top + margin.bottom)
+    timeline.append("g")
       .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
   d3.csv("data/deathdays.csv", (data) => {
