@@ -44,7 +44,7 @@ function drawMap() {
     });
  
  //building labels
-    map.append("g").append("rect")
+   map.append("g").append("rect")
     .attr("class", "brewery")
     .attr("x", 610 )
     .attr("y", 76)
@@ -206,7 +206,6 @@ function drawTimeline() {
  
 //timeline activity
   function onMouseEnter(d, index) {
-    // animate for up to & including target
     for (let i = 0; i <= index; i++) {
       d3.select(`#timelineBar${i}`).classed("timelineHover", true);
       d3.select(`#timelineDate${i}`).classed("timelineHover", true);
@@ -214,7 +213,6 @@ function drawTimeline() {
   }
  
   function onMouseLeave(d, index) {
-    // animate for up to & including target
     for (let i = 0; i <= index; i++) {
       d3.select(`#timelineBar${i}`).classed("timelineHover", false);
       d3.select(`#timelineDate${i}`).classed("timelineHover", false);
