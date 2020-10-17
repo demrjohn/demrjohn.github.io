@@ -26,21 +26,21 @@ function drawMap() {
 
   d3.json("data/streets.json", (data) => {
       streets.selectAll("path")
-        streets.data(data)
-        streets.enter()
-        streets.append("path")
-        streets.attr("class", "street")
-        streets.attr("d", lineFunction);
+        .data(data)
+        .enter()
+        .append("path")
+        .attr("class", "street")
+        .attr("d", lineFunction);
     });
 
   d3.csv("data/pumps.csv", (data) => {
       pumps.selectAll("circle")
-        pumps.data(data)
-        pumps.enter()
-        pumps.append("circle")
-        pumps.attr("cx", d => offset(d.x))
-        pumps.attr("cy", d => offset(d.y))
-        pumps.attr("class", "pumps");
+        .data(data)
+        .enter()
+        .append("circle")
+        .attr("cx", d => offset(d.x))
+        .attr("cy", d => offset(d.y))
+        .attr("class", "pumps");
     });
 
  //building labels
