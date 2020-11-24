@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang = "en">
+    <meta charset="utf-8" />
+
+    <style>
+
+    .heading {
+        color: darkblue;
+        font-family: "Century Gothic", cursive; 
+        font-size: 13px; 
+        line-height: 10px; 
+        font-weight: normal;
+        text-align: center; 
+        text-shadow: 0 5px 5px rgb(160, 146, 146);
+    }
+
+    .about {
+        text-align: center;
+        font-size: 13px;
+        margin-left: 10%;
+        margin-right: 10%;
+    }
+
+    .links { text-align: center;}
+    
+    .buttona { 
+        display: inline-block;
+        text-align: justify;
+        }
+    
+    .buttonb {
+        display: inline-block;
+        text-align: justify;
+    }
+
+    .buttonc {
+        display: inline-block;
+        text-align: justify;
+    }
+
+    main {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-top: 40px;
+        font-family:Arial, Helvetica, sans-serif
+    }
+
+    .instructions {
+        font-display: flex;
+        flex-wrap: wrap;
+        text-align: center;
+        margin-left: 15%;
+        margin-right: 15%;
+        font-size: 12px;
+
+    }
+    div2.Tip {
+        position: absolute;			
+        text-align: center;			
+        width: 60px;					
+        height: 28px;					
+        padding: 2px;				
+        font: 8.5px sans-serif;		
+        background: mistyrose;	
+        border: 0px;		
+        border-radius: 8px;			
+        pointer-events: none;
+    }
+
+    div.tooltip {
+        position: absolute;			
+        text-align: center;			
+        width: 60px;					
+        height: 28px;					
+        padding: 2px;				
+        font: 10px sans-serif;		
+        background: lightsteelblue;	
+        border: 0px;		
+        border-radius: 8px;			
+        pointer-events: none;
+    }
+
+
+    .container {
+        align-items: center;
+    }
+
+    #linechart {
+        font-size: 5px;
+        float: right;
+    }
+
+    #barchart {
+        font-size: 5px;
+    }
+
+    #ageRanges {
+        font-size: 5px;
+
+    }
+
+    path { 
+	    stroke: red;
+	    stroke-width: 2;
+	    fill: none;
+    }
+
+    .axis path,
+    .axis line {
+	    fill: none;
+	    stroke: grey;
+	    stroke-width: 1;
+	    shape-rendering: crispEdges;
+    } 
+
+    .axis text {
+        font-size: 5px;
+    }
+
+    svg {
+     background-color: white;
+    }
+
+    #map {
+        transform: scale(1,-1);
+        display: flex;
+
+    }
+
+    hr.style-four {
+    height: 12px;
+    border: 0;
+    box-shadow: inset 0 12px 12px -12px rgba(0, 0, 0, 0.5);
+    }
+
+
+    </style>
+    <head>
+        <title>H517 Project 1</title>
+        <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+        <script src="streets.json"></script>
+        <script src="deathdays.csv" type="csv"></script>
+        <script src="deaths_age_sex.csv" type="csv"></script>
+        <script src="pumps.csv" type="csv"></script>
+    
+    </head>
+    <body>
+        <div class = "heading">
+            <h1>Project 1 - London's 1854 Cholera Epidemic</h1>
+        </div>
+        <hr class = "style-four">
+        <div class = "about">
+            <h2>About</h2>
+            <p>The Street Map below is a modern representation of Dr. John Snow's map of the 1854 
+                London cholera outbreak. John Snow is regarded as one of the founding fathers of 
+                modern epidemiology because his original map was the first of its kind. His map 
+                allowed him to see a clear pattern that no one had noticed yet thus allowing him 
+                to convince others that an outbreak due to the water pumps was in fact happening.</p>
+        </div>
+        <div class = "links">
+            <div class="buttona">
+                <form>
+                    <button type="submit" formaction="Documentation.html">Documentation Page</button>
+                </form>
+            </div>
+            <div class="buttonb">
+                <form>
+                    <button type="submit" formaction="https://en.wikipedia.org/wiki/John_Snow#/media/File:Snow-cholera-map-1.jpg">John Snow's Original Map</button>
+                </form>
+            </div>
+            <div class="buttonc">
+                <form>
+                    <button type="submit" formaction="https://youtu.be/eN1YjuD2d8c">Youtube Video</button>
+                </form>
+            </div>
+            </div>
+        <main>
+            <div class="container" id="linechart">
+                <h1>Timeline of Cholera Deaths</h1>
+            </div>
+            <div class="container" id="barchart">
+                <h1>Deaths by Gender</h1>
+            </div>
+            <div class="container" id="ageRanges">
+                <h1>Deaths by Age</h1>
+            </div>
+            <div class="container" id="map"></div>
+        
+        <script>
+          
+            var margin = {top: 10, right: 10, bottom: 20, left: 20},
+	        width = 350 - margin.left - margin.right,
+	        height = 200 - margin.top - margin.bottom;
+
+            var parseDate = d3.time.format("%d-%b").parse;
+            var formatTime = d3.time.format("%e %B");
+
+            var x = d3.time.scale().range([0, width]);
+            var y = d3.scale.linear().range([height, 0]); 
+
+            var xAxis = d3.svg.axis().scale(x)
+	            .orient("bottom").ticks(5);
+
+            var yAxis = d3.svg.axis().scale(y)
+	            .orient("left").ticks(5);
+
+            // Define the line
+            var valueline = d3.svg.line()
+	            .x(function(d) { return x(d.date); })
+                .y(function(d) { return y(d.deaths); }); 
+
+            var div2 = d3.select("main").append("div2")	
+                .attr("class", "Tip")				
+                .style("opacity", 0);
+                
+            var chart1 = d3.select("#linechart")
+	            .append("svg")
+		            .attr("width", 400)
+		            .attr("height", 205)
+	            .append("g")
+		            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+            d3.csv("deathdays.csv", function(error, data) {
+                data.forEach(function(d){
+                    d.date = parseDate(d.date);
+                    d.deaths = +d.deaths;   
+                });
+
+                x.domain(d3.extent(data, function(d) { return d.date; }));
+	            y.domain([0, d3.max(data, function(d) { return d.deaths; })]);
+
+                chart1.append("path")
+		            .attr("class", "line")
+                    .attr("d", valueline(data));
+                    
+                chart1.selectAll("Circles")
+                    .data(data)
+                  .enter().append("circle")
+                    .attr("r", 2)
+                    .attr("cx", function(d) { return x(d.date) })
+                    .attr("cy", function(d) { return y(d.deaths) })
+                    .style("fill", "DarkRed")
+                    .on("mouseover", function(d) {		
+                        div2.transition()		
+                            .duration(200)		
+                            .style("opacity", .9);		
+                        div2.html("Deaths:" + d.deaths + "<br/>"  + "Date:" + formatTime(d.date))	
+                            .style("left", (d3.event.pageX) + "px")		
+                            .style("top", (d3.event.pageY - 28) + "px");	
+                        })					
+                    .on("mouseout", function(d) {		
+                        div2.transition()		
+                            .duration(500)		
+                            .style("opacity", 0);	
+                    });
+
+                chart1.append("g")
+		            .attr("class", "x axis")
+		            .attr("transform", "translate(0," + 171 + ")")
+		            .call(xAxis);
+
+	            chart1.append("g")
+		            .attr("class", "y axis")
+                    .call(yAxis);
+
+                chart1.append("text")
+                    .attr("x", 78)
+                    .attr("y", 190)
+                    .style("fill", "black")
+                    .style("font-size", "10px")
+                    .attr("dy", ".35em")
+                    .attr("text-anchor", "middle")
+                    .style("fill", "Black")
+                    .text("Date");
+
+                chart1.append("text")
+                    .attr("x", 15)
+                    .attr("y", -5)
+                    .style("fill", "black")
+                    .style("font-size", "10px")
+                    .attr("dy", ".35em")
+                    .attr("text-anchor", "middle")
+                    .attr("transform", "rotate(90)")
+                    .style("fill", "Black")
+                    .text("Deaths");
+
+            });
+
+            var margin = {top: 40, right: 10, bottom: 20, left: 20},
+	        width = 150 - margin.left - margin.right,
+	        height = 180 - margin.top - margin.bottom;
+
+            //deaths by gender bar chart
+            var chart2 = d3.select("#barchart")
+                    .append("svg")
+                        .attr("width", 200)
+                        .attr("height", 200)
+                    .append("g")
+                        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");  
+
+
+            d3.csv("deaths_age_sex.csv", function(error, data) {
+                
+                console.log(data);
+                
+                var x = d3.scale.ordinal()
+                    .domain(["Female", "Male"])
+                    .rangeRoundBands([0, width], .1);
+	            
+                var y = d3.scale.linear()
+                    .domain([100, 300])
+                    .range([height, 0]);
+
+                var bar = chart2.selectAll("#barchart")
+                    .data(data)
+                    .enter().append("rect")
+                    .attr("class", "bar")
+                    .attr("x", function(d) { return x(d.x); })
+                    .attr("y", function(d) { return y(d.y); })
+                    .attr("width", x.rangeBand())
+                    .attr("height", 0)
+                    .attr('fill', 'grey');
+                
+                var xAxis = d3.svg.axis()
+                    .scale(x)
+                    .orient("bottom");
+
+                var yAxis = d3.svg.axis()
+                    .scale(y)
+                    .orient("left");
+                
+                chart2.append("g")
+		            .attr("class", "x axis")
+		            .attr("transform", "translate(0," + 120 + ")")
+		            .call(xAxis);
+
+                chart2.append("g")
+		            .attr("class", "y axis")
+                    .call(yAxis);
+
+                chart2.append("rect")
+                    .attr("x", 17)
+                    .attr("y", 7.5)
+                    .attr("width", 30)
+                    .attr("height", 112)
+                    .style("fill", "Pink");
+
+                chart2.append("rect")
+                    .attr("x", 73)
+                    .attr("y", 10)
+                    .attr("width", 30)
+                    .attr("height", 110)
+                    .style("fill", "Blue");
+
+                chart2.append("text")
+                    .attr("x", 15)
+                    .attr("y", -5)
+                    .style("fill", "black")
+                    .style("font-size", "10px")
+                    .attr("dy", ".35em")
+                    .attr("text-anchor", "middle")
+                    .attr("transform", "rotate(90)")
+                    .style("fill", "Black")
+                    .text("Deaths");
+
+                chart2.append("text")
+                    .attr("x", 32.5)
+                    .attr("y", 12)
+                    .style("fill", "black")
+                    .style("font-size", "8px")
+                    .style("font-weight", "bold")
+                    .attr("dy", ".35em")
+                    .attr("text-anchor", "middle")
+                    .attr("transform", "rotate(0)")
+                    .style("fill", "Black")
+                    .text("287");
+
+                chart2.append("text")
+                    .attr("x", 88.5)
+                    .attr("y", 15)
+                    .style("fill", "black")
+                    .style("font-size", "8px")
+                    .style("font-weight", "bold")
+                    .attr("dy", ".35em")
+                    .attr("text-anchor", "middle")
+                    .attr("transform", "rotate(0)")
+                    .style("fill", "Black")
+                    .text("284");
+
+                });
+
+
+            //deaths by age range
+            var chart3 = d3.select("#ageRanges")
+                    .append("svg")
+                        .attr("width", 220)
+                        .attr("height", 180)
+                    .append("g")
+                        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");  
+
+            d3.csv("deaths_age_sex.csv", function(error, data) { 
+                console.log(data);
+                
+                var x = d3.scale.ordinal()
+                    .domain(['age 0-10', 'age 11-20', 'age 21-40', 'age 41-60', 'age 61-80', 'age 80+'])
+                    .rangeRoundBands([0, 170], .1);
+	            
+                var y = d3.scale.linear()
+                    .domain([0, 180])
+                    .range([120, 0]);
+
+                var bar = chart2.selectAll("#barchart")
+                    .data(data)
+                    .enter().append("rect")
+                    .attr("class", "bar")
+                    .attr("x", function(d) { return x(d.x); })
+                    .attr("y", function(d) { return y(d.y); })
+                    .attr("width", x.rangeBand());
+                
+                var xAxis = d3.svg.axis()
+                    .scale(x)
+                    .orient("bottom");
+
+                var yAxis = d3.svg.axis()
+                    .scale(y)
+                    .orient("left");
+                
+                chart3.append("g")
+		            .attr("class", "x axis")
+		            .attr("transform", "translate(0," + 120 + ")")
+		            .call(xAxis);
+
+                chart3.append("g")
+                    .attr("class", "y axis")
+                    .call(yAxis);
+
+                chart3.append("rect")
+                    .attr("x", 10)
+                    .attr("y", 23.5)
+                    .attr("width", 15)
+                    .attr("height", 96)
+                    .style("fill", "DarkBlue");
+
+                chart3.append("text")
+                    .attr("x", 17)
+                    .attr("y", 28)
+                    .style("fill", "white")
+                    .style("font-size", "6px")
+                    .attr("dy", ".35em")
+                    .attr("text-anchor", "middle")
+                    .text("143"); 
+
+                chart3.append("rect")
+                    .attr("x", 37)
+                    .attr("y", 86.5)
+                    .attr("width", 15)
+                    .attr("height", 33)
+                    .style("fill", "DarkBlue");
+
+                chart3.append("text")
+                    .attr("x", 44)
+                    .attr("y", 91)
+                    .style("fill", "white")
+                    .style("font-size", "6px")
+                    .attr("dy", ".35em")
+                    .attr("text-anchor", "middle")
+                    .text("48"); 
+
+                chart3.append("rect")
+                    .attr("x", 64)
+                    .attr("y", 80.5)
+                    .attr("width", 15)
+                    .attr("height", 39)
+                    .style("fill", "DarkBlue");
+
+                chart3.append("text")
+                    .attr("x", 71)
+                    .attr("y", 85)
+                    .style("fill", "white")
+                    .style("font-size", "6px")
+                    .attr("dy", ".35em")
+                    .attr("text-anchor", "middle")
+                    .text("58"); 
+
+                chart3.append("rect")
+                    .attr("x", 90)
+                    .attr("y", 81)
+                    .attr("width", 15)
+                    .attr("height", 39)
+                    .style("fill", "DarkBlue");
+
+                chart3.append("text")
+                    .attr("x", 97)
+                    .attr("y", 86)
+                    .style("fill", "white")
+                    .style("font-size", "6px")
+                    .attr("dy", ".35em")
+                    .attr("text-anchor", "middle")
+                    .text("57"); 
+                
+                chart3.append("rect")
+                    .attr("x", 118)
+                    .attr("y", 57)
+                    .attr("width", 15)
+                    .attr("height", 63)
+                    .style("fill", "DarkBlue");
+
+                chart3.append("text")
+                    .attr("x", 125)
+                    .attr("y", 62)
+                    .style("fill", "white")
+                    .style("font-size", "6px")
+                    .attr("dy", ".35em")
+                    .attr("text-anchor", "middle")
+                    .text("91"); 
+
+                chart3.append("rect")
+                    .attr("x", 145)
+                    .attr("y", 6)
+                    .attr("width", 15)
+                    .attr("height", 114)
+                    .style("fill", "DarkBlue");
+
+                chart3.append("text")
+                    .attr("x", 152)
+                    .attr("y", 11)
+                    .style("fill", "white")
+                    .style("font-size", "6px")
+                    .attr("dy", ".35em")
+                    .attr("text-anchor", "middle")
+                    .text("173"); 
+
+                });
+        
+            //create #map
+            var margin = {top: 5, right: 30, bottom: 40, left: 10},
+	        w = 550 - margin.left - margin.right,
+	        h = 450 - margin.top - margin.bottom;
+
+            //create SVG element
+            var svg = d3.select("#map")
+                .append("svg")
+                    .attr("width", w)
+                    .attr("height", h)
+                    .style('background-color', 'white')
+                    .call(d3.behavior.zoom().on("zoom", function () {
+                        svg.attr("transform", "translate(" + d3.event.translate + ")" + " scale(" + d3.event.scale + ")")
+                    }))
+                .append("g");
+
+            var div = d3.select("main")
+                .append("div")
+                .attr("class", "tooltip")
+                .style("opacity", 0);
+            
+            d3.json("streets.json", function(error, data) {
+                streets = data;
+                console.log(data)
+
+                var g = svg.selectAll("g")
+                                .data(data)
+                                .enter().append("line")
+                                .attr("class", "link")
+                                .style('stroke','grey')
+                                .style("stroke-width", 2)
+                                .attr("x1", function(d) { return d[0].x*20; })
+                                .attr("y1", function(d) { return d[0].y*20; })
+                                .attr("x2", function(d) { return d[1].x*20; })
+                                .attr("y2", function(d) { return d[1].y*20; });
+
+
+
+            d3.csv("pumps.csv", function(error, data) {
+                pumps = data;
+                console.log(data)
+
+                var g = svg.selectAll("circle")
+                    .data(data)
+                    .enter().append("circle")
+                    .attr("cx", function(d) { return d.x*20; })
+                    .attr("cy", function(d) { return d.y*20; })
+                    .attr("r", 4)
+                    .style("fill", "blue")
+                });
+            
+
+            d3.csv("deaths_age_sex.csv", function(error, data) { 
+                
+                var g = svg.selectAll("circle")
+                            .data(data)
+                            .enter().append("circle")
+                            .attr("cx", function(d) { return d.x*20; })
+                            .attr("cy", function(d) { return d.y*20; })
+                            .attr("r", 1)
+                            .style("fill", 'red')
+                            .on("mouseover", function(d) {
+                                div.transition()		
+                                    .duration(200)		
+                                    .style("opacity", .9);		
+                                div.html("age:" + d.age + "<br/>"  + "gender:"+ d.gender)	
+                                    .style("left", (d3.event.pageX) + "px")		
+                                    .style("top", (d3.event.pageY - 28) + "px");	
+                                })
+                            .on("mouseout", function(d) {
+                                div.transition()
+                                    .duration(500)
+                                    .style("opacity", 0);
+                            });
+                        })  
+
+                svgLine = svg.append("line")
+                    .attr("x1", 379)
+                    .attr("y1", -142)
+                    .attr("x2", 245)
+                    .attr("y2", -114)
+                    .attr("transform", "scale(1, -1) rotate(10)")
+                    .style('stroke','grey')
+                    .style("stroke-width", 2);
+
+                svgLine = svg.append("line")
+                    .attr("x1", 378)
+                    .attr("y1", -145)
+                    .attr("x2", 315)
+                    .attr("y2", -439)
+                    .attr("transform", "scale(1, -1) rotate(10.5)")
+                    .style('stroke','grey')
+                    .style("stroke-width", 2);
+
+                svgLine = svg.append("line")
+                    .attr("x1", 76)
+                    .attr("y1", -62)
+                    .attr("x2", 101)
+                    .attr("y2", -56)
+                    .attr("transform", "rotate(80)")
+                    .style('stroke','grey')
+                    .style("stroke-width", 2);
+
+                
+                //rect for Golden square
+                svgRect = svg.append("rect")
+                    .attr("x", 280)
+                    .attr("y", -4)
+                    .attr("width", 19)
+                    .attr("height", 21)
+                    .style("fill", "LightGray")
+                    .attr("transform", "scale(1, -1) rotate(-36)");
+
+                svgText = svg.append("text")
+                    .attr("x", 288)
+                    .attr("y", 27)
+                    .style("fill", "black")
+                    .style("font-weight", "bold")
+                    .style("font-size", "6px")
+                    .attr("dy", ".35em")
+                    .attr("text-anchor", "middle")
+                    .attr("transform", "scale(1, -1) rotate(-41)")
+                    .text("Golden"); 
+
+                svgText = svg.append("text")
+                    .attr("x", 287)
+                    .attr("y", 35)
+                    .style("fill", "black")
+                    .style("font-weight", "bold")
+                    .style("font-size", "6px")
+                    .attr("dy", ".35em")
+                    .attr("text-anchor", "middle")
+                    .attr("transform", "scale(1, -1) rotate(-41)")
+                    .text("Square"); 
+
+                svgText = svg.append("text")
+                    .attr("x", 280)
+                    .attr("y", 60)
+                    .style("fill", "black")
+                    .style("font-weight", "bold")
+                    .style("font-size", "8px")
+                    .attr("dy", ".35em")
+                    .attr("text-anchor", "middle")
+                    .attr("transform", "scale(1, -1) rotate(-41)")
+                    .text("Brewer Street");  
+                    
+                svgText = svg.append("text")
+                    .attr("x", -90)
+                    .attr("y", -246)
+                    .style("fill", "black")
+                    .style("font-weight", "bold")
+                    .style("font-size", "8px")
+                    .attr("dy", ".35em")
+                    .attr("text-anchor", "middle")
+                    .attr("transform", "scale(1, -1) rotate(60)")
+                    .text("Regent Street"); 
+
+                svgText = svg.append("text")
+                    .attr("x", 250)
+                    .attr("y", -380)
+                    .style("fill", "black")
+                    .style("font-weight", "italics")
+                    .style("font-size", "20px")
+                    .attr("dy", ".35em")
+                    .attr("text-anchor", "middle")
+                    .attr("transform", "scale(1, -1) rotate(-2)")
+                    .text("Cholera Map");
+
+                svgCircle = svg.append("circle")
+                    .attr("cx", 395)
+                    .attr("cy", -359)
+                    .attr("r", 3)
+                    .attr("transform", "rotate(80)")
+                    .style("fill", "red");
+
+                svgText = svg.append("text")
+                    .attr("x", 455)
+                    .attr("y", -312)
+                    .style("fill", "black")
+                    .style("font-weight", "italics")
+                    .style("font-size", "10px")
+                    .attr("dy", ".35em")
+                    .attr("text-anchor", "middle")
+                    .attr("transform", "scale(1, -1) rotate(-2)")
+                    .text("Deaths");
+
+                svgCircle = svg.append("circle")
+                    .attr("cx", 378)
+                    .attr("cy", -362)
+                    .attr("r", 5)
+                    .attr("transform", "rotate(80)")
+                    .style("fill", "blue");
+
+                svgText = svg.append("text")
+                    .attr("x", 455)
+                    .attr("y", -295)
+                    .style("fill", "black")
+                    .style("font-weight", "italics")
+                    .style("font-size", "10px")
+                    .attr("dy", ".35em")
+                    .attr("text-anchor", "middle")
+                    .attr("transform", "scale(1, -1) rotate(-2)")
+                    .text("Pumps");
+
+                svgText = svg.append("text")
+                    .attr("x", 20)
+                    .attr("y", -295)
+                    .style("fill", "black")
+                    .style("font-weight", "bold")
+                    .style("font-size", "10px")
+                    .attr("dy", ".35em")
+                    .attr("text-anchor", "middle")
+                    .attr("transform", "scale(1, -1)")
+                    .text("Key:");
+
+                svgText = svg.append("text")
+                    .attr("x", 33)
+                    .attr("y", -283)
+                    .style("fill", "black")
+                    .style("font-weight", "italics")
+                    .style("font-size", "10px")
+                    .attr("dy", ".35em")
+                    .attr("text-anchor", "middle")
+                    .attr("transform", "scale(1, -1)")
+                    .text("Age 0 =  0-10");
+
+                svgText = svg.append("text")
+                    .attr("x", 45)
+                    .attr("y", -272)
+                    .style("fill", "black")
+                    .style("font-weight", "italics")
+                    .style("font-size", "10px")
+                    .attr("dy", ".35em")
+                    .attr("text-anchor", "middle")
+                    .attr("transform", "scale(1, -1)")
+                    .text("1 =  11-20");
+                
+                svgText = svg.append("text")
+                    .attr("x", 45)
+                    .attr("y", -259)
+                    .style("fill", "black")
+                    .style("font-weight", "italics")
+                    .style("font-size", "10px")
+                    .attr("dy", ".35em")
+                    .attr("text-anchor", "middle")
+                    .attr("transform", "scale(1, -1)")
+                    .text("2 =  21-40");
+
+                svgText = svg.append("text")
+                    .attr("x", 45)
+                    .attr("y", -247)
+                    .style("fill", "black")
+                    .style("font-weight", "italics")
+                    .style("font-size", "10px")
+                    .attr("dy", ".35em")
+                    .attr("text-anchor", "middle")
+                    .attr("transform", "scale(1, -1)")
+                    .text("3 =  41-60");
+
+                svgText = svg.append("text")
+                    .attr("x", 45)
+                    .attr("y", -235)
+                    .style("fill", "black")
+                    .style("font-weight", "italics")
+                    .style("font-size", "10px")
+                    .attr("dy", ".35em")
+                    .attr("text-anchor", "middle")
+                    .attr("transform", "scale(1, -1)")
+                    .text("4 =  61-80");
+
+                svgText = svg.append("text")
+                    .attr("x", 41)
+                    .attr("y", -223)
+                    .style("fill", "black")
+                    .style("font-weight", "italics")
+                    .style("font-size", "10px")
+                    .attr("dy", ".35em")
+                    .attr("text-anchor", "middle")
+                    .attr("transform", "scale(1, -1)")
+                    .text("5 =   >80");
+
+                svgText = svg.append("text")
+                    .attr("x", 30)
+                    .attr("y", -205)
+                    .style("fill", "black")
+                    .style("font-weight", "italics")
+                    .style("font-size", "10px")
+                    .attr("dy", ".35em")
+                    .attr("text-anchor", "middle")
+                    .attr("transform", "scale(1, -1) rotate(-1)")
+                    .text("Gender  0 = Male");
+
+                svgText = svg.append("text")
+                    .attr("x", 50)
+                    .attr("y", -194)
+                    .style("fill", "black")
+                    .style("font-weight", "italics")
+                    .style("font-size", "10px")
+                    .attr("dy", ".35em")
+                    .attr("text-anchor", "middle")
+                    .attr("transform", "scale(1, -1) rotate(-1)")
+                    .text("1 = Female");
+
+                svgText = svg.append("text")
+                    .attr("x", 268)
+                    .attr("y", -185)
+                    .style("fill", "black")
+                    .style("font-weight", "bold")
+                    .style("font-size", "8px")
+                    .attr("dy", ".35em")
+                    .attr("text-anchor", "middle")
+                    .attr("transform", "scale(1, -1) rotate(-23)")
+                    .text("Great Marlborough Street");
+                
+                svgText = svg.append("text")
+                    .attr("x", 323)
+                    .attr("y", -95)
+                    .style("fill", "black")
+                    .style("font-weight", "bold")
+                    .style("font-size", "8px")
+                    .attr("dy", ".35em")
+                    .attr("text-anchor", "middle")
+                    .attr("transform", "scale(1, -1) rotate(-28)")
+                    .text("Broad Street");
+
+                svgRect = svg.append("rect")
+                    .attr("x", 305)
+                    .attr("y", -145)
+                    .attr("width", 30)
+                    .attr("height", 18)
+                    .style("fill", "LightGray")
+                    .attr("transform", "scale(1, -1) rotate(-28)");
+
+                svgText = svg.append("text")
+                    .attr("x", 320)
+                    .attr("y", -139)
+                    .style("fill", "black")
+                    .style("font-size", "7px")
+                    .style("font-weight", "bold")
+                    .attr("dy", ".35em")
+                    .attr("text-anchor", "middle")
+                    .attr("transform", "scale(1, -1) rotate(-28)")
+                    .text("Work");
+
+                svgText = svg.append("text")
+                    .attr("x", 320)
+                    .attr("y", -132)
+                    .style("fill", "black")
+                    .style("font-size", "7px")
+                    .style("font-weight", "bold")
+                    .attr("dy", ".35em")
+                    .attr("text-anchor", "middle")
+                    .attr("transform", "scale(1, -1) rotate(-28)")
+                    .text("House");
+
+                svgRect = svg.append("rect")
+                    .attr("x", -77)
+                    .attr("y", -365)
+                    .attr("width", 22)
+                    .attr("height", 11)
+                    .style("fill", "LightGray")
+                    .attr("transform", "scale(1, -1) rotate(60)");
+
+                svgText = svg.append("text")
+                    .attr("x", -66)
+                    .attr("y", -360)
+                    .style("fill", "black")
+                    .style("font-weight", "bold")
+                    .style("font-size", "5.5px")
+                    .attr("dy", ".35em")
+                    .attr("text-anchor", "middle")
+                    .attr("transform", "scale(1, -1) rotate(60)")
+                    .text("Brewery");
+
+            });
+
+            </script>
+
+            <div class = "instructions">
+                <h3>Instructions for Map</h3>
+                <p>Map has zoom in/out or scroll around capabilities by using your map. 
+                    Hover over red circles to display the age and gender of cholera victim. </p>
+            </div>
+        </main>
+    </body>
+</html>
