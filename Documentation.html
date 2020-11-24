@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+    <style>
+
+        .button {
+            font-size: 12px;
+        }
+
+        .title {
+        color: darkblue;
+        font-family: "Century Gothic", cursive; 
+        font-size: 13px; 
+        line-height: 10px; 
+        font-weight: normal;
+        text-align: center; 
+        text-shadow: 0 5px 5px rgb(160, 146, 146);
+        }
+
+        .about {
+            text-align: center;
+            padding-left: 130px;
+            padding-right: 130px;
+            font-size: 11px;
+        }
+
+        .documentation {
+            float: center;
+            width: 85%;
+            padding-left: 70px;
+            padding-right: 70px;
+            font-size: 11px;
+            font-family:Arial, Helvetica, sans-serif
+        }
+
+        .sketches {
+            float: left;
+            width: 48%;
+            padding: 5px;
+            text-align: center;
+        }
+
+        hr.style-four {
+        height: 12px;
+        border: 0;
+        box-shadow: inset 0 12px 12px -12px rgba(0, 0, 0, 0.5);
+        }
+
+    </style>
+    <head>
+        <meta charset="utf-8">
+        <title>Data Visualization-Project 1</title>
+        <link href="index copy.html" rel="stylesheet">
+    </head>
+    <body>
+        <div class="button">
+            <a href="index copy.html">Back to visualization</a>
+        </div>
+        <div class="title">
+        <h2>Documenation Page</h2>
+        </div>
+        <div class="about">
+        <p><strong>The modernized visualization of John Snow's 1854 Cholera Map was created by Demi Johnson for Dr. Khairi Reda's, 
+         Fall 2020, H517: Visualization Design, Analysis, and Evaluation course conducted at IUPUI. The goal of this project is 
+         to recreate the original map in an interactive version and create additional charts by using today's tools of trade
+          (D3, Data-Driven Documents). </strong><br/><p>
+         </div>
+        <hr class = "style-four">
+        <div class="documentation">
+        <h3>Design Process</h3>
+        <p>At the start of this project, I knew I was going to be incredibly challenged. I have never used anything like D3, 
+            let alone very much JavaScript or HTML. To begin the project, my first step in the design process was to gain a 
+            solid understanding of the data, which I was going to be creating the visualizations from. Additionally, it was great
+             to have the original map from John Snow as a reference while creating my map. I decided from the files given,
+              that I wanted to create three other maps to represent the deaths by date, by gender and by age group. 
+        <h4>Initial Designs:</h4>
+        <p>My initial design involved the street map to the left of the other corresponding charts. The timeline chart, another bar
+             chart to show the number of deaths by gender and a bar chart to show the number of deaths by age group would be those 
+             corresponding charts to the right. Also, I wanted an about section at the top underneath the page title, and buttons 
+             for my additional links underneath the charts and maps. After implementing this initial design, I began to see that I
+              should modify the layout to make it easier for the user to see all charts at one time and to allow the map zoom to be more
+               accessible. Therefore, I moved the buttons under the about section at the top of the page and aligned the three 
+               corresponding charts above the map. I centered the map and added map instructions underneath so users can understand 
+               how to zoom in and out, and hover over the data points.</p>
+        <h4>Sketches</h4>
+        <div class="sketches">
+            <img src="Original.Sketch.jpg" width="300" height="400">
+            <h5>Original Sketch</h5>
+        </div>
+        <div class="sketches">
+            <img src="Final.Sketch.jpg" width="300" height="400">
+             <h5>Final Sketch</h5>
+        </div>
+        <h3>Rationale for Design Choices</h3>
+        <h4>Colors</h4>
+        <p>When choosing my colors, I wanted to select symbolic and stereotypical colors for my maps and charts. 
+            I also wanted to pick colors that will be visible for those users that are color blind or have 
+            color impaired vision. I used the color blindness simulator, Color Oracle to test if the colors
+             I chose would be sufficient with “Deuteranopia”, “Protanopia”, and “Tritanopia” color vision. 
+             Color Oracle is a color tool recommended by Dr. Reda.</p>
+        <a href="http://colororacle.org/">Color Oracle</a>
+        <ul>
+        <li>Pumps = Large, blue circles; to represent water and to be easily visible in comparison to the deaths 
+        </li>
+         <li>Deaths = Small, red circles; to represent death
+        </li>
+        <li>Streets = dark grey; good contrast between the white background but not too dark to allow the street names to be visible
+        </li>
+        <li>Street names = Small, bold, black color : easier to notice but does not hinder the data variables
+        </li>
+        <li>Timeline chart = Red line chart; the chart also represents death
+        </li>
+        <li>Gender chart: 
+            Female bar = pink; in color psychology we typically align pink with girl //
+            Male bar = blue; with color psychology we align blue with boy           
+        </li>
+        </ul>
+        <h4>Chart Arrangement</h4>
+        <p>As mentioned in my design process above, I arranged my charts the way I did to allow easy
+             visibility and accessibility. I wanted this to be a priority in my design so users can 
+             make easy correlations between the map and charts.</p>
+        <p>Why bar and line charts?
+        <ul>
+        <li>The two additional charts I made bar charts because they are easy to visualize comparing 
+            grouped data and when comparing two different groups against each other. If I were able 
+            to figure out how, I would have created these bar charts into pie charts. That is because
+             the data could be broken up into percentages, being perfect for a pie chart.
+        </li>
+        <li>I chose a line chart for my Timeline visualization so you can make a quick assumption on
+             when the peaks were. Also, because line charts are good when wanting to show data over 
+             a period of time.
+        </li>
+        </ul>
+        </p>
+        <h3>Facts and Findings</h3>
+        <p>With the creation of my three additional charts that collectively manipulated the map, I could make a 
+        few new discoveries regarding the data that John Snow’s original map made it difficult to conclude:
+        <ul>
+        <li>The youth and elders were affected most by Cholera, an anticipated relational discovery to disease.
+             Age ranges 0-10 and 80+ had the highest number of deaths.
+        </li>
+        <li>A huge spike in deaths around September 1st and 2nd, was the Broad Street water pump excessively used 
+            a few days prior? 
+        </li>
+        <li>There were no gender biases with the deaths from Cholera, the number of deaths were relatively similar.
+        </li>
+        <li>On the map it showed some ‘outliers’ you could say when it comes to locations of deaths. Did 
+            those people work near the pump? Many had other pumps near by them. What caused them to use the 
+            Broad Street pump? 
+        </li>
+        </p>
+        <h3>References</h3>
+        <ul>
+        <li>
+        http://bl.ocks.org/sgruhier/1d692762f8328a2c9957
+        </li>
+        <li>
+        https://bl.ocks.org/d3noob/a22c42db65eb00d4e369
+        </li>
+        <li>
+        https://www.tutorialsteacher.com/d3js/axes-in-d3
+        </li>
+        <li>
+        http://bl.ocks.org/d3noob/6a3b59149cf3ebdb3fc4
+        </li>
+        <li>
+        https://www.tutorialspoint.com/d3js/d3js_svg_transformation.htm    
+        </li>
+        <li>
+        https://stackoverflow.com/questions/63907635/creating-multiple-lines-using-json-file-with-coordinates-in-d3-js
+        </li>
+        <li>
+        https://bl.ocks.org/d3noob/8952219
+        </li>
+        <li>
+        https://khreda.com/teaching/2020/H517/resources.html
+        </li>
+        <li>
+        https://en.wikipedia.org/wiki/1854_Broad_Street_cholera_outbreak
+        </li>
+        <li>
+        https://css-tricks.com/examples/hrs/
+        </li>
+        <li>
+        https://d3js.org/
+        </li>
+        <li>Murray, Scott. Interactive Data Visualization for the Web. O'Reilly, 2013.
+        </li>
+        </ul>
+        </div>
+    </body>
+</html>        
